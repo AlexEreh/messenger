@@ -1,5 +1,8 @@
 package com.alexereh.messenger.user.service;
 
+import com.alexereh.messenger.exceptions.NotSamePasswordsException;
+import com.alexereh.messenger.exceptions.UserAlreadyDeletedException;
+import com.alexereh.messenger.exceptions.WrongPasswordException;
 import com.alexereh.messenger.user.repository.UserRepository;
 import com.alexereh.messenger.user.model.User;
 import com.alexereh.messenger.user.requests.ChangePasswordRequest;
@@ -22,11 +25,11 @@ public class UserService {
 
 		// check if the current password is correct
 		if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-			throw new IllegalStateException("Wrong password");
+			throw new WrongPasswordException("Wrong password");
 		}
 		// check if the two new passwords are the same
 		if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-			throw new IllegalStateException("Password are not the same");
+			throw new NotSamePasswordsException("Password are not the same");
 		}
 
 		// update the password
@@ -38,6 +41,10 @@ public class UserService {
 
 	public void deleteUser(Principal connectedUser) {
 		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+		var userFromStorage = repository.findById(user.getId()).orElseThrow();
+		if (userFromStorage.isDeleted()) {
+			throw new UserAlreadyDeletedException("Пользователь уже удалён");
+		}
 		user.setDeleted(true);
 		repository.save(user);
 	}

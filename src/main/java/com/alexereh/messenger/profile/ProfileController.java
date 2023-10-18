@@ -1,14 +1,11 @@
 package com.alexereh.messenger.profile;
 
+import com.alexereh.messenger.profile.responses.ProfileInfoResponse;
+import com.alexereh.messenger.profile.requests.NewProfileInfoRequest;
 import com.alexereh.messenger.profile.service.ProfileService;
-import com.alexereh.messenger.user.service.UserService;
-import com.alexereh.messenger.user.requests.ChangePasswordRequest;
-import com.alexereh.messenger.user.responses.ChangePasswordResponse;
-import com.alexereh.messenger.user.responses.DeleteUserResponse;
-import com.alexereh.messenger.user.responses.IsUserDeletedResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,11 +17,25 @@ import java.security.Principal;
 public class ProfileController {
 
 	private final ProfileService service;
+
+	@Operation(
+			summary = "Получить информацию о текущем пользователе"
+	)
 	@GetMapping("/get-my-info")
-	public ResponseEntity<ChangePasswordResponse> getMyInfo(
+	public ProfileInfoResponse getMyInfo(
 			Principal connectedUser
 	) {
-		service.getMyInfo(connectedUser);
-		return ResponseEntity.ok().build();
+		return service.getMyInfo(connectedUser);
+	}
+
+	@Operation(
+			summary = "Изменить информацию о текущем пользователе"
+	)
+	@PatchMapping("/change-my-info")
+	public void changeMyInfo(
+			Principal connectedUser,
+			@RequestBody NewProfileInfoRequest request
+	) {
+		service.changeMyInfo(connectedUser, request);
 	}
 }

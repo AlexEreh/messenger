@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import static com.alexereh.messenger.user.model.Role.USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -24,7 +25,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfig {
 
-	private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
+	private static final String[] WHITE_LIST_URL = {
+			"/auth/**",
 			"/v2/api-docs",
 			"/v3/api-docs",
 			"/v3/api-docs/**",
@@ -48,6 +50,9 @@ public class SecurityConfig {
 				.authorizeHttpRequests(req ->
 						req.requestMatchers(WHITE_LIST_URL)
 								.permitAll()
+								.requestMatchers("/messages/**").hasAnyRole(USER.name())
+								.requestMatchers("/profile/**").hasAnyRole(USER.name())
+								.requestMatchers("/user/**").hasAnyRole(USER.name())
 								.anyRequest()
 								.authenticated()
 				)

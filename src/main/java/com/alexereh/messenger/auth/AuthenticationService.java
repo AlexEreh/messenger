@@ -4,9 +4,12 @@ import com.alexereh.messenger.auth.requests.LoginRequest;
 import com.alexereh.messenger.auth.requests.RegisterRequest;
 import com.alexereh.messenger.auth.responses.AuthenticationResponse;
 import com.alexereh.messenger.config.JwtService;
+import com.alexereh.messenger.exceptions.ResourceNotFoundException;
+import com.alexereh.messenger.exceptions.UserDeletedException;
 import com.alexereh.messenger.token.Token;
 import com.alexereh.messenger.token.TokenRepository;
 import com.alexereh.messenger.token.TokenType;
+import com.alexereh.messenger.user.model.Role;
 import com.alexereh.messenger.user.repository.UserRepository;
 import com.alexereh.messenger.user.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,10 +37,10 @@ public class AuthenticationService {
 		var user = User.builder()
 				.firstName(request.getFirstName())
 				.lastName(request.getLastName())
-				.nickname(request.getNickName())
+				.nickname(request.getNickname())
 				.email(request.getEmail())
 				.password(passwordEncoder.encode(request.getPassword()))
-				.role(request.getRole())
+				.role(Role.USER)
 				.deleted(false)
 				.build();
 		var savedUser = repository.save(user);
@@ -58,7 +61,10 @@ public class AuthenticationService {
 				)
 		);
 		var user = repository.findByEmail(request.getEmail())
-				.orElseThrow();
+				.orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден."));
+		if (user.isDeleted()) {
+			throw new UserDeletedException("User ID: " + user.getId());
+		}
 		var jwtToken = jwtService.generateToken(user);
 		var refreshToken = jwtService.generateRefreshToken(user);
 		revokeAllUserTokens(user);

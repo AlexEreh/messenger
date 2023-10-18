@@ -1,21 +1,18 @@
 package com.alexereh.messenger.user.model;
 
 import com.alexereh.messenger.token.Token;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.Collection;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,11 +24,17 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Integer id;
+	@Size(min = 1, max = 64)
 	private String nickname;
+	@Size(min = 1, max = 64)
 	private String firstName;
+	@Size(min = 1, max = 64)
 	private String lastName;
+	@Email
+	@Size(min = 1, max = 100)
 	private String email;
+	//@Size(min = 8, max = 32)
 	private String password;
 	private boolean deleted;
 

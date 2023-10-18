@@ -10,7 +10,7 @@ public interface ChatMessageRepository
 		extends MongoRepository<ChatMessage, String> {
 
 	long countBySenderIdAndRecipientIdAndStatus(
-			String senderId, String recipientId, MessageStatus status);
+			Integer senderId, Integer recipientId, MessageStatus status);
 
 	List<ChatMessage> findByChatId(String chatId);
 }
