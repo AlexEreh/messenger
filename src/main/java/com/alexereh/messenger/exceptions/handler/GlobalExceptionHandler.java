@@ -1,7 +1,9 @@
 package com.alexereh.messenger.exceptions.handler;
 
+import com.alexereh.messenger.exceptions.NoChatException;
 import com.alexereh.messenger.exceptions.ResourceNotFoundException;
 import com.alexereh.messenger.exceptions.UserDeletedException;
+import com.alexereh.messenger.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,6 +31,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				), HttpStatus.GONE
 		);
 	}
+
+	@ExceptionHandler
+	public ResponseEntity<AppError> catchNoChatException(NoChatException e) {
+		log.error(e.getMessage(), e);
+		return new ResponseEntity<>(
+				new AppError(
+						HttpStatus.OK.value(),
+						"Чата с пользователем пока нет!",
+						e.getMessage()
+				), HttpStatus.OK
+		);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<AppError> catchUsernameNotFoundException(UserNotFoundException e) {
+		log.error(e.getMessage(), e);
+		return new ResponseEntity<>(
+				new AppError(
+						HttpStatus.NOT_FOUND.value(),
+						"Пользователь не был найден",
+						e.getMessage()
+				), HttpStatus.NOT_FOUND
+		);
+	}
+
+
 
 	@ExceptionHandler
 	public ResponseEntity<AppError> catchResourceNotFoundException(ResourceNotFoundException e) {

@@ -10,4 +10,6 @@ public class ProfileInfoResponse {
 	private String firstName;
 	@JsonProperty("last_name")
 	private String lastName;
+	@JsonProperty("id")
+	private Integer id;
 }

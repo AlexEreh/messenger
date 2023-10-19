@@ -53,6 +53,7 @@ public class SecurityConfig {
 								.requestMatchers("/messages/**").hasAnyRole(USER.name())
 								.requestMatchers("/profile/**").hasAnyRole(USER.name())
 								.requestMatchers("/user/**").hasAnyRole(USER.name())
+								.requestMatchers("/chat/**").hasAnyRole(USER.name())
 								.anyRequest()
 								.authenticated()
 				)

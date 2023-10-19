@@ -5,6 +5,7 @@ import com.alexereh.messenger.user.responses.ChangePasswordResponse;
 import com.alexereh.messenger.user.responses.DeleteUserResponse;
 import com.alexereh.messenger.user.responses.IsUserDeletedResponse;
 import com.alexereh.messenger.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,10 @@ import java.security.Principal;
 public class UserController {
 
 	private final UserService service;
+
+	@Operation(
+			summary = "Изменить пароль у текущего пользователя"
+	)
 	@PatchMapping("/change-password")
 	public ResponseEntity<ChangePasswordResponse> changePassword(
 			@RequestBody ChangePasswordRequest request,
@@ -28,6 +33,9 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(
+			summary = "Удалиться из этого жесткого бэкенда"
+	)
 	@DeleteMapping("/delete-self")
 	public ResponseEntity<DeleteUserResponse> deleteUser(
 			Principal connectedUser
@@ -36,6 +44,9 @@ public class UserController {
 		return ResponseEntity.ok(DeleteUserResponse.builder().build());
 	}
 
+	@Operation(
+			summary = "Проверить, удалён ли текущий пользователь"
+	)
 	@GetMapping("/is-deleted")
 	public ResponseEntity<IsUserDeletedResponse> isUserDeleted(
 			Principal connectedUser

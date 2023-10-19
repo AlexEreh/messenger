@@ -1,16 +1,13 @@
 package com.alexereh.messenger.chat.repository;
 
 import com.alexereh.messenger.chat.model.ChatMessage;
-import com.alexereh.messenger.chat.model.MessageStatus;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ChatMessageRepository
-		extends MongoRepository<ChatMessage, String> {
-
-	long countBySenderIdAndRecipientIdAndStatus(
-			Integer senderId, Integer recipientId, MessageStatus status);
+@Repository
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, Integer> {
 
 	List<ChatMessage> findByChatId(String chatId);
 }

@@ -17,7 +17,7 @@ public class ProfileService {
 	public ProfileInfoResponse getMyInfo(Principal connectedUser) {
 		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 		var userInStorage = repository.findById(user.getId()).orElseThrow();
-		return new ProfileInfoResponse(userInStorage.getFirstName(), userInStorage.getLastName());
+		return new ProfileInfoResponse(userInStorage.getFirstName(), userInStorage.getLastName(), user.getId());
 	}
 
 	public void changeMyInfo(Principal connectedUser, NewProfileInfoRequest request){
