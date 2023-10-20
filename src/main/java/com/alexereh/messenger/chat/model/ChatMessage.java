@@ -1,9 +1,7 @@
 package com.alexereh.messenger.chat.model;
 
 import com.alexereh.messenger.user.model.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +14,13 @@ import lombok.NoArgsConstructor;
 @Entity
 public class ChatMessage {
 	@Id
+	@GeneratedValue
 	private Integer id;
-	private String chatId;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User sender;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User recipient;
+	@ManyToOne
+	private ChatRoom chat;
 	private String content;
 }

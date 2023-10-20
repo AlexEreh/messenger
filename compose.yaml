@@ -1,23 +1,6 @@
 version: '3.9'
 
 services:
-  app:
-    image: messenger-app
-    build: # this is the build context: .
-      context: .
-      dockerfile: Dockerfile
-    ports: # port exposed to the host machine
-      - "8080:8080"
-    environment: # these are the environment variables that are passed to the dockerfile
-      DB_URL: jdbc:postgresql://db:5432/postgres
-      PG_USER: messenger
-      PG_PASSWORD: 12345567
-    depends_on: # this is the dependency on the db service
-      - db
-      - mongo
-    networks:
-      - app-network
-    restart: always
   db:
     image: 'postgres:latest'
     environment:
@@ -29,22 +12,12 @@ services:
     volumes: # volume used to persist data
       - pgdata:/var/lib/postgresql/data
     networks:
-      - app-network
+      - localhost
     restart: always
-  mongo:
-    image: "mongo:4.4.3"
-    restart: always
-    volumes:
-      - mongodata:/data/db
-    ports:
-      - "27017:27017"
-    networks:
-      - app-network
 
 volumes: # volume creation
   pgdata: {}
-  mongodata: {}
 
 networks:
-  app-network:
+  localhost:
     driver: bridge

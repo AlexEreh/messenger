@@ -1,8 +1,15 @@
+FROM amazoncorretto:17-alpine-jdk as build
+WORKDIR /app/build
+COPY . /app
+RUN chmod +x /app/gradlew
+RUN /app/gradlew build -x test
+
+#
 FROM amazoncorretto:17-alpine-jdk
-LABEL maintainer="xcode111@mail.ru"
 EXPOSE 8080
+
 RUN mkdir /app
 
-COPY build/libs/*.jar /app/*.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
 
-ENTRYPOINT ["java", "-jar","/app/*.jar"]
+ENTRYPOINT ["java", "-jar","/app/spring-boot-application.jar"]

@@ -3,7 +3,6 @@ package com.alexereh.messenger.user;
 import com.alexereh.messenger.user.requests.ChangePasswordRequest;
 import com.alexereh.messenger.user.responses.ChangePasswordResponse;
 import com.alexereh.messenger.user.responses.DeleteUserResponse;
-import com.alexereh.messenger.user.responses.IsUserDeletedResponse;
 import com.alexereh.messenger.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,17 +41,5 @@ public class UserController {
 	) {
 		service.deleteUser(connectedUser);
 		return ResponseEntity.ok(DeleteUserResponse.builder().build());
-	}
-
-	@Operation(
-			summary = "Проверить, удалён ли текущий пользователь"
-	)
-	@GetMapping("/is-deleted")
-	public ResponseEntity<IsUserDeletedResponse> isUserDeleted(
-			Principal connectedUser
-	) {
-		boolean deleted = service.isUserDeleted(connectedUser);
-		var response = IsUserDeletedResponse.builder().deleted(deleted).build();
-		return ResponseEntity.ok(response);
 	}
 }

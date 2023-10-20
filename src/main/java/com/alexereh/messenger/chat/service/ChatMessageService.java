@@ -12,17 +12,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
-	private final ChatMessageRepository repository;
+	private final ChatMessageRepository messageRepository;
 	private final ChatRoomService chatRoomService;
 
 	@Transactional
 	public ChatMessage save(ChatMessage chatMessage) {
-		return repository.save(chatMessage);
+		return messageRepository.save(chatMessage);
 	}
 
 	public List<ChatMessage> findChatMessages(User user, Integer recipientId) {
-		var chatId = chatRoomService.getChatId(user.getId(), recipientId);
+		var chat = chatRoomService.getChatId(user.getId(), recipientId);
 
-		return repository.findByChatId(chatId);
+		return messageRepository.findByChatId(chat.getId());
 	}
 }

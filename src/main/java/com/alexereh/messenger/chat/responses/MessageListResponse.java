@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageListResponse {
-	private List<ChatMessage> data;
+	private List<ResponseMessage> data;
 }

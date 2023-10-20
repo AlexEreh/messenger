@@ -49,8 +49,4 @@ public class UserService {
 		repository.save(user);
 	}
 
-	public boolean isUserDeleted(Principal connectedUser) {
-		var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-		return user.isDeleted();
-	}
 }
